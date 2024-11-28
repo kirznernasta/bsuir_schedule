@@ -15,12 +15,13 @@ class ScreenTemplate extends StatelessWidget {
       data: mediaQueryData.copyWith(textScaler: TextScaler.noScaling),
       child: Material(
         child: ColoredBox(
-          color: Colors.black12,
+          color: const Color(0xFFEDEDED),
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: padding16.h,
-                horizontal: padding16.w,
+              padding: EdgeInsets.only(
+                top: padding16.h,
+                left: padding16.w,
+                right: padding16.w,
               ),
               child: body,
             ),

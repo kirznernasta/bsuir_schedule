@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
+import '../../../gen/assets.gen.dart';
 import '../../../router/router.dart';
+import '../presentation.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -11,7 +13,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const icons = Assets.icons;
     final iconSize = 40.w;
+    final activeColorFilter = context.theme.primaryColor.colorFilter;
+    final inactiveColorFilter = const Color(0xff646464).colorFilter;
 
     return AutoTabsScaffold(
       extendBody: true,
@@ -21,26 +26,52 @@ class HomeScreen extends StatelessWidget {
         TeachersRoute(),
         SettingsRoute(),
       ],
-      bottomNavigationBuilder: (_, tabsRouter) => SalomonBottomBar(
-        selectedColorOpacity: 0,
-        backgroundColor: Colors.grey,
-        onTap: tabsRouter.setActiveIndex,
-        currentIndex: tabsRouter.activeIndex,
-        margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 34.w),
-        itemPadding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-        items: [
-          SalomonBottomBarItem(
-            icon: Icon(Icons.group, size: iconSize),
-            title: const Text('Groups'),
-          ),
-          SalomonBottomBarItem(
-            icon: Icon(Icons.switch_account, size: iconSize),
-            // activeIcon: Icon(Icons.add),
-            title: const Text('Teachers'),
-          ),
-          SalomonBottomBarItem(
-            icon: Icon(Icons.settings, size: iconSize),
-            title: const Text('Settings'),
+      bottomNavigationBuilder: (_, tabsRouter) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(height: 1.h, thickness: 1.h),
+          SalomonBottomBar(
+            selectedColorOpacity: 0,
+            backgroundColor: const Color(0xFFEDEDED),
+            onTap: tabsRouter.setActiveIndex,
+            currentIndex: tabsRouter.activeIndex,
+            margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 34.w),
+            itemPadding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+            items: [
+              SalomonBottomBarItem(
+                icon: icons.group.svg(
+                  width: iconSize,
+                  colorFilter: inactiveColorFilter,
+                ),
+                activeIcon: icons.group.svg(
+                  width: iconSize,
+                  colorFilter: activeColorFilter,
+                ),
+                title: const Text('Groups'),
+              ),
+              SalomonBottomBarItem(
+                icon: icons.idCard.svg(
+                  width: iconSize,
+                  colorFilter: inactiveColorFilter,
+                ),
+                activeIcon: icons.idCard.svg(
+                  width: iconSize,
+                  colorFilter: activeColorFilter,
+                ),
+                title: const Text('Teachers'),
+              ),
+              SalomonBottomBarItem(
+                icon: icons.settings.svg(
+                  width: iconSize,
+                  colorFilter: inactiveColorFilter,
+                ),
+                activeIcon: icons.settings.svg(
+                  width: iconSize,
+                  colorFilter: activeColorFilter,
+                ),
+                title: const Text('Settings'),
+              ),
+            ],
           ),
         ],
       ),
