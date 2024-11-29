@@ -38,7 +38,9 @@ class _GroupCard extends StatelessWidget {
           subtitle: descriptionTexts.join('·'),
           hasTopRounded: hasTopRounded,
           hasBottomRounded: hasBottomRounded,
-          onTap: () {},
+          onTap: () async {
+            print(await getIt<ScheduleRepository>().fetchGroupSchedule(group.name));
+          },
         ),
       ],
     );

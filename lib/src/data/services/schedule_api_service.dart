@@ -49,9 +49,45 @@ class ScheduleApiService {
             .toList();
       }
     } on DioException catch (e) {
-      print('Get student groups error: $e');
+      print('Get employees error: $e');
     }
 
     return employees;
+  }
+
+  Future<ScheduleModel?> fetchGroupSchedule(String groupNumber) async {
+    ScheduleModel? schedule;
+
+    try {
+      final response = await _dio.get('schedule?studentGroup=$groupNumber');
+
+      if (response.statusCode == HttpStatus.ok) {
+        final responseData = response.data;
+
+        schedule = ScheduleModel.fromJson(responseData as Map<String, dynamic>);
+      }
+    } on DioException catch (e) {
+      print('Get student group schedule error: $e');
+    }
+
+    return schedule;
+  }
+
+  Future<ScheduleModel?> fetchEmployeeSchedule(String urlId) async {
+    ScheduleModel? schedule;
+
+    try {
+      final response = await _dio.get('schedule/$urlId');
+
+      if (response.statusCode == HttpStatus.ok) {
+        final responseData = response.data;
+
+        schedule = ScheduleModel.fromJson(responseData as Map<String, dynamic>);
+      }
+    } on DioException catch (e) {
+      print('Get employee schedule error: $e');
+    }
+
+    return schedule;
   }
 }

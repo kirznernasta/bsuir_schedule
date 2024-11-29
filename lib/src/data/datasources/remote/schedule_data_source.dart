@@ -15,4 +15,12 @@ class ScheduleDataSource {
   Future<List<EmployeeModel>> fetchAllEmployees() {
     return _scheduleApiService.fetchAllEmployees();
   }
+
+  Future<ScheduleModel?> fetchGroupSchedule(String groupNumber) {
+    return _scheduleApiService.fetchGroupSchedule(groupNumber);
+  }
+
+  Future<ScheduleModel?> fetchEmployeeSchedule(String urlId) {
+    return _scheduleApiService.fetchEmployeeSchedule(urlId);
+  }
 }

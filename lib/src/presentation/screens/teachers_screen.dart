@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../config/config.dart';
+import '../../domain/domain.dart';
 import '../presentation.dart';
 
 @RoutePage()
@@ -103,6 +104,10 @@ class _TeachersScreenState extends State<TeachersScreen> {
                                   ),
                                 ),
                               ),
+                              onTap: () async {
+                                print(await getIt<ScheduleRepository>()
+                                    .fetchEmployeeSchedule(employee.urlId));
+                              },
                             );
                           },
                         ),
