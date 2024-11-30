@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../src/presentation/presentation.dart';
@@ -24,5 +25,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: SettingsRoute.page),
       ],
     ),
+    AutoRoute(page: ScheduleRoute.page),
   ];
 }

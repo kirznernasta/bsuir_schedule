@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../router/router.dart';
 import '../../config/config.dart';
-import '../../domain/domain.dart';
 import '../presentation.dart';
 
 @RoutePage()
@@ -104,10 +104,14 @@ class _TeachersScreenState extends State<TeachersScreen> {
                                   ),
                                 ),
                               ),
-                              onTap: () async {
-                                print(await getIt<ScheduleRepository>()
-                                    .fetchEmployeeSchedule(employee.urlId));
-                              },
+                              onTap: () => context.pushRoute(
+                                ScheduleRoute(
+                                  isGroupSchedule: false,
+                                  searchingInput: employee.urlId,
+                                  title:
+                                      '${employee.lastName} ${employee.firstName[0]} ${employee.middleName?[0] ?? ''}',
+                                ),
+                              ),
                             );
                           },
                         ),

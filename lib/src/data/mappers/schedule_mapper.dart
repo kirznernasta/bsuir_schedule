@@ -6,6 +6,7 @@ class ScheduleMapper {
 
   static ScheduleEntity fromModel(ScheduleModel model) {
     return ScheduleEntity(
+      exams: ScheduleItemMapper.fromModels(model.exams),
       employee: model.employee == null
           ? null
           : EmployeeMapper.fromModel(model.employee!),

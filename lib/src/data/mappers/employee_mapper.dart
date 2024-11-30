@@ -17,7 +17,11 @@ class EmployeeMapper {
     );
   }
 
-  static List<EmployeeEntity> fromModels(List<EmployeeModel> models) {
+  static List<EmployeeEntity>? fromModels(List<EmployeeModel>? models) {
+    if (models == null){
+      return null;
+    }
+
     return models.map((model) => fromModel(model)).toList();
   }
 }

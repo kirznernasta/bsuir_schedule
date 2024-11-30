@@ -27,6 +27,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeScreen(),
       );
     },
+    ScheduleRoute.name: (routeData) {
+      final args = routeData.argsAs<ScheduleRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ScheduleScreen(
+          isGroupSchedule: args.isGroupSchedule,
+          searchingInput: args.searchingInput,
+          title: args.title,
+          key: args.key,
+        ),
+      );
+    },
     SettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -68,6 +80,54 @@ class HomeRoute extends PageRouteInfo<void> {
   static const String name = 'HomeRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ScheduleScreen]
+class ScheduleRoute extends PageRouteInfo<ScheduleRouteArgs> {
+  ScheduleRoute({
+    required bool isGroupSchedule,
+    required String searchingInput,
+    String? title,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ScheduleRoute.name,
+          args: ScheduleRouteArgs(
+            isGroupSchedule: isGroupSchedule,
+            searchingInput: searchingInput,
+            title: title,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ScheduleRoute';
+
+  static const PageInfo<ScheduleRouteArgs> page =
+      PageInfo<ScheduleRouteArgs>(name);
+}
+
+class ScheduleRouteArgs {
+  const ScheduleRouteArgs({
+    required this.isGroupSchedule,
+    required this.searchingInput,
+    this.title,
+    this.key,
+  });
+
+  final bool isGroupSchedule;
+
+  final String searchingInput;
+
+  final String? title;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ScheduleRouteArgs{isGroupSchedule: $isGroupSchedule, searchingInput: $searchingInput, title: $title, key: $key}';
+  }
 }
 
 /// generated route for

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../gen/assets.gen.dart';
+import '../../../../router/router.dart';
 import '../../../config/config.dart';
 import '../../../domain/domain.dart';
 import '../../presentation.dart';

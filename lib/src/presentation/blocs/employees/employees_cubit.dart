@@ -16,7 +16,7 @@ class EmployeesCubit extends Cubit<EmployeesState> {
   Future<void> fetchAllEmployees() async {
     emit(EmployeesInProgress());
 
-    final employees = await _scheduleRepository.fetchAllEmployees()
+    final employees = (await _scheduleRepository.fetchAllEmployees() ?? [])
       ..sort((a, b) => a.lastName.compareTo(b.lastName));
     _employees = employees;
 
@@ -30,8 +30,7 @@ class EmployeesCubit extends Cubit<EmployeesState> {
       final fullName = [
         employee.lastName,
         employee.firstName,
-        if (employee.middleName != null)
-          employee.middleName,
+        if (employee.middleName != null) employee.middleName,
       ].join(' ');
 
       return fullName.contains(searchInput);

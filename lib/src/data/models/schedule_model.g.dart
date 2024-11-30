@@ -8,6 +8,9 @@ part of 'schedule_model.dart';
 
 ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
     ScheduleModel(
+      exams: (json['exams'] as List<dynamic>?)
+          ?.map((e) => ScheduleItemModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       endDate: json['endDate'] as String?,
       employee: json['employeeDto'] == null
           ? null

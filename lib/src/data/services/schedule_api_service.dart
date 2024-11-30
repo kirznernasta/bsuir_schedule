@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import '../data.dart';
+import 'dart:developer';
 
 // ignore_for_file: avoid_print
 class ScheduleApiService {
@@ -64,6 +65,8 @@ class ScheduleApiService {
       if (response.statusCode == HttpStatus.ok) {
         final responseData = response.data;
 
+        log('responseData: $responseData');
+
         schedule = ScheduleModel.fromJson(responseData as Map<String, dynamic>);
       }
     } on DioException catch (e) {
@@ -77,7 +80,7 @@ class ScheduleApiService {
     ScheduleModel? schedule;
 
     try {
-      final response = await _dio.get('schedule/$urlId');
+      final response = await _dio.get('/employees/schedule/$urlId');
 
       if (response.statusCode == HttpStatus.ok) {
         final responseData = response.data;

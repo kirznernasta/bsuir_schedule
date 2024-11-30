@@ -15,8 +15,10 @@ class ScheduleModel {
   final String? endDate;
   final String? startExamsDate;
   final String? endExamsDate;
+  final List<ScheduleItemModel>? exams;
 
   const ScheduleModel({
+    this.exams,
     this.endDate,
     this.employee,
     this.schedules,

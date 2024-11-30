@@ -17,7 +17,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   }
 
   @override
-  Future<List<EmployeeEntity>> fetchAllEmployees() async {
+  Future<List<EmployeeEntity>?> fetchAllEmployees() async {
     final employeeModels = await _scheduleDataSource.fetchAllEmployees();
 
     return EmployeeMapper.fromModels(employeeModels);

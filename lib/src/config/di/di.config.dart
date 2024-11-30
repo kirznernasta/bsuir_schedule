@@ -18,7 +18,8 @@ import '../../data/repositories/schedule_repository_impl.dart' as _i7;
 import '../../domain/domain.dart' as _i6;
 import '../../presentation/blocs/employees/employees_cubit.dart' as _i8;
 import '../../presentation/blocs/groups/groups_cubit.dart' as _i9;
-import 'register_module.dart' as _i10;
+import '../../presentation/blocs/schedule/schedule_cubit.dart' as _i10;
+import 'register_module.dart' as _i11;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i1.GetIt $initGetIt(
@@ -43,7 +44,9 @@ _i1.GetIt $initGetIt(
       () => _i8.EmployeesCubit(gh<_i6.ScheduleRepository>()));
   gh.factory<_i9.GroupsCubit>(
       () => _i9.GroupsCubit(gh<_i6.ScheduleRepository>()));
+  gh.factory<_i10.ScheduleCubit>(
+      () => _i10.ScheduleCubit(gh<_i6.ScheduleRepository>()));
   return getIt;
 }
 
-class _$RegisterModule extends _i10.RegisterModule {}
+class _$RegisterModule extends _i11.RegisterModule {}

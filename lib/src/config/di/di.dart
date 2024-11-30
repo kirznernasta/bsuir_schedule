@@ -20,5 +20,5 @@ Future<void> initApplication() async {
 
   GetItHelper(getIt);
 
-   $initGetIt(getIt);
+   await $initGetIt(getIt);
 }

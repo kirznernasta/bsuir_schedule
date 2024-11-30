@@ -6,20 +6,26 @@ part 'week_schedule_model.g.dart';
 
 @JsonSerializable(createToJson: false)
 class WeekScheduleModel {
-  final List<ScheduleItemModel> friday;
-  final List<ScheduleItemModel> monday;
-  final List<ScheduleItemModel> tuesday;
-  final List<ScheduleItemModel> thursday;
-  final List<ScheduleItemModel> saturday;
-  final List<ScheduleItemModel> wednesday;
+  @JsonKey(name: 'Пятница')
+  final List<ScheduleItemModel>? friday;
+  @JsonKey(name: 'Понедельник')
+  final List<ScheduleItemModel>? monday;
+  @JsonKey(name: 'Вторник')
+  final List<ScheduleItemModel>? tuesday;
+  @JsonKey(name: 'Четверг')
+  final List<ScheduleItemModel>? thursday;
+  @JsonKey(name: 'Суббота')
+  final List<ScheduleItemModel>? saturday;
+  @JsonKey(name: 'Среда')
+  final List<ScheduleItemModel>? wednesday;
 
   const WeekScheduleModel({
-    required this.friday,
-    required this.monday,
-    required this.tuesday,
-    required this.saturday,
-    required this.thursday,
-    required this.wednesday,
+    this.friday,
+    this.monday,
+    this.tuesday,
+    this.saturday,
+    this.thursday,
+    this.wednesday,
   });
 
   factory WeekScheduleModel.fromJson(Map<String, dynamic> json) =>

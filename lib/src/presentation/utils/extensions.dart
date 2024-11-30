@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../gen/assets.gen.dart';
+import '../../domain/domain.dart';
 
 extension BuildContextExt on BuildContext {
   /// Application theme.
@@ -38,5 +42,47 @@ extension RadiusExt on double {
     }
 
     return BorderRadius.zero;
+  }
+}
+
+extension SubgroupTypeExt on SubgroupType {
+  Widget get icon {
+    return switch (this) {
+      SubgroupType.subgroup1 => Row(
+          children: [
+            Assets.icons.person.svg(
+              width: 24.w,
+              colorFilter: Colors.grey.colorFilter,
+            ),
+            Text('1'),
+          ],
+        ),
+      SubgroupType.subgroup2 => Row(
+          children: [
+            Assets.icons.person.svg(
+              width: 24.w,
+              colorFilter: Colors.grey.colorFilter,
+            ),
+            Text('2'),
+          ],
+        ),
+      SubgroupType.all => Assets.icons.groups.svg(
+          width: 24.w,
+          colorFilter: Colors.grey.colorFilter,
+        ),
+    };
+  }
+}
+
+extension LessonTypeExt on LessonType {
+  Color get color {
+    return switch (this) {
+      LessonType.lecture => Colors.green,
+      LessonType.lab => Colors.yellow,
+      LessonType.practical => Colors.red,
+      LessonType.exam => Colors.purple,
+      LessonType.consultation => Colors.brown,
+      LessonType.unknown => Colors.grey,
+    };
   }
 }

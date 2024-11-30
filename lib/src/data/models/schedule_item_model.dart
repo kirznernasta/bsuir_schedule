@@ -13,36 +13,38 @@ class ScheduleItemModel {
   @JsonKey(name: 'announcement')
   final bool isAnnouncement;
   final String endLessonTime;
-  final String endLessonDate;
   @JsonKey(name: 'weekNumber')
   final List<int> weekNumbers;
   final String startLessonTime;
   final String subjectFullName;
-  final String startLessonDate;
   final List<String> auditories;
   final String lessonTypeAbbrev;
-  final List<EmployeeModel> employees;
   @JsonKey(name: 'subject')
   final String subjectAbbreviationName;
   final List<StudentGroupModel> studentGroups;
   final String? note;
+  final String? dateLesson;
+  final String? endLessonDate;
+  final String? startLessonDate;
+  final List<EmployeeModel>? employees;
 
   const ScheduleItemModel({
     required this.isSplit,
-    required this.employees,
     required this.auditories,
     required this.weekNumbers,
-    required this.endLessonDate,
     required this.endLessonTime,
     required this.studentGroups,
     required this.subgroupNumber,
     required this.isAnnouncement,
-    required this.startLessonDate,
     required this.startLessonTime,
     required this.subjectFullName,
     required this.lessonTypeAbbrev,
     required this.subjectAbbreviationName,
     this.note,
+    this.dateLesson,
+    this.employees,
+    this.endLessonDate,
+    this.startLessonDate,
   });
 
   factory ScheduleItemModel.fromJson(Map<String, dynamic> json) =>
