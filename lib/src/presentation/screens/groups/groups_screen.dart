@@ -21,9 +21,12 @@ class GroupsScreen extends StatefulWidget {
 
 class _GroupsScreenState extends State<GroupsScreen> {
   final groupsCubit = getIt<GroupsCubit>();
+  final favouriteGroupsCubit = getIt<FavouriteGroupsCubit>();
 
   late final FocusNode focusNode;
   late final TextEditingController searchController;
+
+  List<int> favouriteIds = [];
 
   @override
   void initState() {
@@ -33,6 +36,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
     searchController = TextEditingController();
 
     groupsCubit.fetchAllGroups();
+    favouriteGroupsCubit.fetchFavouriteGroups();
   }
 
   @override
@@ -52,7 +56,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   return const AppLoader();
                 }
 
-                final groups = state.groups;
+                final allGroups = state.allGroups;
+                final filteredGroups = state.filteredGroups;
 
                 return Column(
                   children: [
@@ -73,48 +78,98 @@ class _GroupsScreenState extends State<GroupsScreen> {
                       textEditingController: searchController,
                     ),
                     SizedBox(height: 16.h),
-                    if (groups.isNotEmpty)
-                      Expanded(
-                        child: ListView.separated(
-                          itemBuilder: (_, i) {
-                            final isFirst = i == 0;
-                            final isLast = i == groups.length - 1;
-                            final group = groups[i];
-                            var hasTopRounded = isFirst;
-                            var hasBottomRounded = isLast;
-                            final currentCode = group.name.substring(0, 3);
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          BlocBuilder(
+                            bloc: favouriteGroupsCubit,
+                            builder: (_, state) {
+                              if (state is! FavouriteGroupsUpdate) {
+                                return const SizedBox();
+                              }
+                              favouriteIds = state.groupsIds;
 
-                            if (i > 0) {
-                              final previousGroup = groups[i - 1];
-                              final previousCode =
-                                  previousGroup.name.substring(0, 3);
-                              hasTopRounded |= previousCode != currentCode;
-                            }
-                            if (i < groups.length - 1) {
-                              final nextGroup = groups[i + 1];
-                              final nextCode = nextGroup.name.substring(0, 3);
-                              hasBottomRounded |= nextCode != currentCode;
-                            }
+                              if (favouriteIds.isEmpty) return const SizedBox();
 
-                            return _GroupCard(
-                              group: group,
-                              hasTopRounded: hasTopRounded,
-                              hasBottomRounded: hasBottomRounded,
-                            );
-                          },
-                          separatorBuilder: (_, i) {
-                            final currentCode = groups[i].name.substring(0, 3);
-                            final nextCode = groups[i + 1].name.substring(0, 3);
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('Favourites ⭐️'),
+                                  SizedBox(height: 16.h),
+                                  for (var i = 0;
+                                      i < favouriteIds.length;
+                                      i++) ...[
+                                    _GroupCard(
+                                      group: allGroups.firstWhere(
+                                        (group) => group.id == favouriteIds[i],
+                                      ),
+                                      isFavourite: true,
+                                      hasCodeText: false,
+                                      hasTopRounded: i == 0,
+                                      hasBottomRounded:
+                                          i == favouriteIds.length - 1,
+                                    ),
+                                    if (i < favouriteIds.length - 1)
+                                      SizedBox(height: 2.h),
+                                  ],
+                                  SizedBox(height: 16.h),
+                                ],
+                              );
+                            },
+                          ),
+                          if (filteredGroups.isNotEmpty) ...[
+                            for (var i = 0; i < filteredGroups.length; i++)
+                              Builder(
+                                builder: (_) {
+                                  final isFirst = i == 0;
+                                  final isLast = i == filteredGroups.length - 1;
+                                  final group = filteredGroups[i];
+                                  var hasTopRounded = isFirst;
+                                  var hasBottomRounded = isLast;
+                                  final currentCode =
+                                      group.name.substring(0, 3);
 
-                            return SizedBox(
-                              height: currentCode != nextCode ? 16.h : 2.h,
-                            );
-                          },
-                          itemCount: groups.length,
-                        ),
-                      )
-                    else
-                      NoSearchResult(searchInput: searchController.text),
+                                  if (i > 0) {
+                                    final previousGroup = filteredGroups[i - 1];
+                                    final previousCode =
+                                        previousGroup.name.substring(0, 3);
+                                    hasTopRounded |=
+                                        previousCode != currentCode;
+                                  }
+                                  if (i < filteredGroups.length - 1) {
+                                    final nextGroup = filteredGroups[i + 1];
+                                    final nextCode =
+                                        nextGroup.name.substring(0, 3);
+                                    hasBottomRounded |= nextCode != currentCode;
+                                  }
+                                  return Column(
+                                    children: [
+                                      _GroupCard(
+                                        group: group,
+                                        isFavourite: favouriteIds.contains(
+                                          group.id,
+                                        ),
+                                        hasTopRounded: hasTopRounded,
+                                        hasBottomRounded: hasBottomRounded,
+                                      ),
+                                      if (i < filteredGroups.length - 1)
+                                        SizedBox(
+                                          height: currentCode !=
+                                                  filteredGroups[i + 1]
+                                                      .name
+                                                      .substring(0, 3)
+                                              ? 16.h
+                                              : 2.h,
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
+                          ] else
+                            NoSearchResult(searchInput: searchController.text),
+                        ],
+                      ),
+                    ),
                   ],
                 );
               },
@@ -128,6 +183,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   void dispose() {
     groupsCubit.close();
+    favouriteGroupsCubit.close();
 
     super.dispose();
   }

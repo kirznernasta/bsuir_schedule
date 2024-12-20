@@ -4,6 +4,7 @@ class EmployeeEntity {
   final String imageUrl;
   final String lastName;
   final String firstName;
+  final String? fio;
   final String? email;
   final String? middleName;
   final String? calendarId;
@@ -14,6 +15,7 @@ class EmployeeEntity {
     required this.lastName,
     required this.imageUrl,
     required this.firstName,
+    this.fio,
     this.email,
     this.middleName,
     this.calendarId,

@@ -1,19 +1,28 @@
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:postgres/postgres.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/data.dart';
 
 @module
 abstract class RegisterModule {
   @lazySingleton
-  ScheduleApiService getScheduleApiService() {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://iis.bsuir.by/api/v1/',
-        queryParameters: {'format': 'json'},
+  @preResolve
+  Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
+
+  @lazySingleton
+  @preResolve
+  Future<ScheduleApiService> getScheduleApiService() async {
+    final connection = await Connection.open(
+      Endpoint(
+        host: 'localhost',
+        database: 'postgres',
+        username: 'postgres',
+        password: 'postgres',
       ),
+      settings: const ConnectionSettings(sslMode: SslMode.disable),
     );
 
-    return ScheduleApiService(dio);
+    return ScheduleApiService(connection);
   }
 }

@@ -54,7 +54,7 @@ extension SubgroupTypeExt on SubgroupType {
               width: 24.w,
               colorFilter: Colors.grey.colorFilter,
             ),
-            Text('1'),
+            const Text('1'),
           ],
         ),
       SubgroupType.subgroup2 => Row(
@@ -63,7 +63,7 @@ extension SubgroupTypeExt on SubgroupType {
               width: 24.w,
               colorFilter: Colors.grey.colorFilter,
             ),
-            Text('2'),
+            const Text('2'),
           ],
         ),
       SubgroupType.all => Assets.icons.groups.svg(

@@ -22,7 +22,12 @@ class EmployeesCubit extends Cubit<EmployeesState> {
 
     if (isClosed) return;
 
-    emit(EmployeesUpdate(employees: employees));
+    emit(
+      EmployeesUpdate(
+        allEmployees: employees,
+        filteredEmployees: employees,
+      ),
+    );
   }
 
   void filterEmployees(String searchInput) {
@@ -31,11 +36,16 @@ class EmployeesCubit extends Cubit<EmployeesState> {
         employee.lastName,
         employee.firstName,
         if (employee.middleName != null) employee.middleName,
-      ].join(' ');
+      ].join(' ').toLowerCase();
 
-      return fullName.contains(searchInput);
+      return fullName.contains(searchInput.toLowerCase());
     });
 
-    emit(EmployeesUpdate(employees: employees.toList()));
+    emit(
+      EmployeesUpdate(
+        allEmployees: _employees,
+        filteredEmployees: employees.toList(),
+      ),
+    );
   }
 }

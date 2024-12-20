@@ -15,6 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    ExitConfirmationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ExitConfirmationScreen(),
+      );
+    },
     GroupsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -32,6 +38,8 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ScheduleScreen(
+          id: args.id,
+          isFavourite: args.isFavourite,
           isGroupSchedule: args.isGroupSchedule,
           searchingInput: args.searchingInput,
           title: args.title,
@@ -45,6 +53,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SettingsScreen(),
       );
     },
+    SignInRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SignInScreen(),
+      );
+    },
+    SignUpRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SignUpScreen(),
+      );
+    },
     TeachersRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -52,6 +72,20 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
   };
+}
+
+/// generated route for
+/// [ExitConfirmationScreen]
+class ExitConfirmationRoute extends PageRouteInfo<void> {
+  const ExitConfirmationRoute({List<PageRouteInfo>? children})
+      : super(
+          ExitConfirmationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ExitConfirmationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -86,6 +120,8 @@ class HomeRoute extends PageRouteInfo<void> {
 /// [ScheduleScreen]
 class ScheduleRoute extends PageRouteInfo<ScheduleRouteArgs> {
   ScheduleRoute({
+    required int id,
+    required bool isFavourite,
     required bool isGroupSchedule,
     required String searchingInput,
     String? title,
@@ -94,6 +130,8 @@ class ScheduleRoute extends PageRouteInfo<ScheduleRouteArgs> {
   }) : super(
           ScheduleRoute.name,
           args: ScheduleRouteArgs(
+            id: id,
+            isFavourite: isFavourite,
             isGroupSchedule: isGroupSchedule,
             searchingInput: searchingInput,
             title: title,
@@ -110,11 +148,17 @@ class ScheduleRoute extends PageRouteInfo<ScheduleRouteArgs> {
 
 class ScheduleRouteArgs {
   const ScheduleRouteArgs({
+    required this.id,
+    required this.isFavourite,
     required this.isGroupSchedule,
     required this.searchingInput,
     this.title,
     this.key,
   });
+
+  final int id;
+
+  final bool isFavourite;
 
   final bool isGroupSchedule;
 
@@ -126,7 +170,7 @@ class ScheduleRouteArgs {
 
   @override
   String toString() {
-    return 'ScheduleRouteArgs{isGroupSchedule: $isGroupSchedule, searchingInput: $searchingInput, title: $title, key: $key}';
+    return 'ScheduleRouteArgs{id: $id, isFavourite: $isFavourite, isGroupSchedule: $isGroupSchedule, searchingInput: $searchingInput, title: $title, key: $key}';
   }
 }
 
@@ -140,6 +184,34 @@ class SettingsRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SettingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SignInScreen]
+class SignInRoute extends PageRouteInfo<void> {
+  const SignInRoute({List<PageRouteInfo>? children})
+      : super(
+          SignInRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignInRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SignUpScreen]
+class SignUpRoute extends PageRouteInfo<void> {
+  const SignUpRoute({List<PageRouteInfo>? children})
+      : super(
+          SignUpRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignUpRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

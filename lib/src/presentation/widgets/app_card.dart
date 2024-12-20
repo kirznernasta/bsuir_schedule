@@ -7,6 +7,7 @@ class AppCard extends StatelessWidget {
   final String title;
   final bool hasTopRounded;
   final bool hasBottomRounded;
+  final bool hasPrefix;
   final Widget? suffix;
   final String? subtitle;
   final VoidCallback? onTap;
@@ -15,6 +16,7 @@ class AppCard extends StatelessWidget {
     required this.title,
     required this.hasTopRounded,
     required this.hasBottomRounded,
+    this.hasPrefix = true,
     this.suffix,
     this.subtitle,
     this.onTap,
@@ -46,7 +48,11 @@ class AppCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,),
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   if (subtitle != null)
                     Text(
                       subtitle!,
@@ -57,12 +63,14 @@ class AppCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 8.w),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 16.w,
-              color: Colors.grey,
-            ),
+            if (hasPrefix) ...[
+              SizedBox(width: 8.w),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16.w,
+                color: Colors.grey,
+              ),
+            ],
           ],
         ),
       ),

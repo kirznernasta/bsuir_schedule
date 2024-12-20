@@ -12,9 +12,6 @@ ScheduleItemModel _$ScheduleItemModelFromJson(Map<String, dynamic> json) =>
       auditories: (json['auditories'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      weekNumbers: (json['weekNumber'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
-          .toList(),
       endLessonTime: json['endLessonTime'] as String,
       studentGroups: (json['studentGroups'] as List<dynamic>)
           .map((e) => StudentGroupModel.fromJson(e as Map<String, dynamic>))
@@ -22,9 +19,13 @@ ScheduleItemModel _$ScheduleItemModelFromJson(Map<String, dynamic> json) =>
       subgroupNumber: (json['numSubgroup'] as num).toInt(),
       isAnnouncement: json['announcement'] as bool,
       startLessonTime: json['startLessonTime'] as String,
-      subjectFullName: json['subjectFullName'] as String,
-      lessonTypeAbbrev: json['lessonTypeAbbrev'] as String,
-      subjectAbbreviationName: json['subject'] as String,
+      subjectFullName: json['subjectFullName'] as String? ?? '',
+      lessonTypeAbbrev: json['lessonTypeAbbrev'] as String? ?? '',
+      subjectAbbreviationName: json['subject'] as String? ?? '',
+      weekNumbers: (json['weekNumber'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
       note: json['note'] as String?,
       dateLesson: json['dateLesson'] as String?,
       employees: (json['employees'] as List<dynamic>?)

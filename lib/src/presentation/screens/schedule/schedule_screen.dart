@@ -22,11 +22,15 @@ part './widgets/exams_schedule.dart';
 
 @RoutePage()
 class ScheduleScreen extends StatefulWidget {
+  final int id;
+  final bool isFavourite;
   final bool isGroupSchedule;
   final String searchingInput;
   final String? title;
 
   const ScheduleScreen({
+    required this.id,
+    required this.isFavourite,
     required this.isGroupSchedule,
     required this.searchingInput,
     this.title,
@@ -39,6 +43,10 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   final scheduleCubit = getIt<ScheduleCubit>();
+  final favouriteGroupsCubit = getIt<FavouriteGroupsCubit>();
+  final favouriteEmployeesCubit = getIt<FavouriteEmployeesCubit>();
+
+  late final ValueNotifier<bool> favouriteValueNotifier;
   late final ValueNotifier<SubgroupType> subgroupValueNotifier;
 
   @override
@@ -46,6 +54,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     super.initState();
 
     subgroupValueNotifier = ValueNotifier(SubgroupType.all);
+    favouriteValueNotifier = ValueNotifier(widget.isFavourite);
 
     scheduleCubit.fetchSchedule(
       isGroup: widget.isGroupSchedule,
@@ -92,61 +101,97 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     ],
                   ),
                 ),
+                ValueListenableBuilder(
+                  valueListenable: favouriteValueNotifier,
+                  builder: (_, isFavourite, __) => IconButton(
+                    onPressed: () async {
+                      final previous = favouriteValueNotifier.value;
+
+                      if (previous) {
+                        if (widget.isGroupSchedule) {
+                          await favouriteGroupsCubit
+                              .deleteFavouriteGroup(widget.id);
+                        } else {
+                          await favouriteEmployeesCubit
+                              .deleteFavouriteEmployee(widget.id);
+                        }
+                      } else {
+                        if (widget.isGroupSchedule) {
+                          await favouriteGroupsCubit
+                              .addFavouriteGroup(widget.id);
+                        } else {
+                          await favouriteEmployeesCubit
+                              .addFavouriteEmployee(widget.id);
+                        }
+                      }
+
+                      favouriteValueNotifier.value = !previous;
+                    },
+                    icon: Icon(
+                      isFavourite ? Icons.star : Icons.star_border_outlined,
+                      color: isFavourite ? const Color(0xFFF1CB06) : Colors.grey,
+                      size: 24.w,
+                    ),
+                  ),
+                ),
                 if (widget.isGroupSchedule)
-                  ValueListenableBuilder(
-                    valueListenable: subgroupValueNotifier,
-                    builder: (_, subgroupFilter, __) => PopupMenuButton(
-                      offset: Offset(0, 32.h),
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                          onTap: () =>
-                              changeSubgroupFilter(SubgroupType.subgroup1),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (subgroupFilter == SubgroupType.subgroup1)
-                                Icon(Icons.check),
-                              Text('Subgroup 1'),
-                              Assets.icons.person.svg(
-                                width: 24.w,
-                                colorFilter: Colors.black.colorFilter,
-                              ),
-                            ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.w),
+                    child: ValueListenableBuilder(
+                      valueListenable: subgroupValueNotifier,
+                      builder: (_, subgroupFilter, __) => PopupMenuButton(
+                        offset: Offset(0, 32.h),
+                        itemBuilder: (_) => [
+                          PopupMenuItem(
+                            onTap: () =>
+                                changeSubgroupFilter(SubgroupType.subgroup1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (subgroupFilter == SubgroupType.subgroup1)
+                                  const Icon(Icons.check),
+                                const Text('Subgroup 1'),
+                                Assets.icons.person.svg(
+                                  width: 24.w,
+                                  colorFilter: Colors.black.colorFilter,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        PopupMenuItem(
-                          onTap: () =>
-                              changeSubgroupFilter(SubgroupType.subgroup2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (subgroupFilter == SubgroupType.subgroup2)
-                                Icon(Icons.check),
-                              Text('Subgroup 2'),
-                              Assets.icons.person.svg(
-                                width: 24.w,
-                                colorFilter: Colors.black.colorFilter,
-                              ),
-                            ],
+                          PopupMenuItem(
+                            onTap: () =>
+                                changeSubgroupFilter(SubgroupType.subgroup2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (subgroupFilter == SubgroupType.subgroup2)
+                                  const Icon(Icons.check),
+                                const Text('Subgroup 2'),
+                                Assets.icons.person.svg(
+                                  width: 24.w,
+                                  colorFilter: Colors.black.colorFilter,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        PopupMenuItem(
-                          onTap: () => changeSubgroupFilter(SubgroupType.all),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (subgroupFilter == SubgroupType.all)
-                                Icon(Icons.check),
-                              Text('All'),
-                              Assets.icons.group.svg(
-                                width: 24.w,
-                                colorFilter: Colors.black.colorFilter,
-                              ),
-                            ],
+                          PopupMenuItem(
+                            onTap: () => changeSubgroupFilter(SubgroupType.all),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (subgroupFilter == SubgroupType.all)
+                                  const Icon(Icons.check),
+                                const Text('All'),
+                                Assets.icons.group.svg(
+                                  width: 24.w,
+                                  colorFilter: Colors.black.colorFilter,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                      child: subgroupFilter.icon,
+                        ],
+                        child: subgroupFilter.icon,
+                      ),
                     ),
                   )
                 else
@@ -171,7 +216,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   final schedule = state.schedule;
 
                   if (schedule == null || (schedule.schedules == null)) {
-                    return Column(
+                    return const Column(
                       children: [
                         Text('No schedule'),
                       ],
@@ -209,6 +254,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
+  // ignore: use_setters_to_change_properties
   void changeSubgroupFilter(SubgroupType subgroupType) =>
       subgroupValueNotifier.value = subgroupType;
 

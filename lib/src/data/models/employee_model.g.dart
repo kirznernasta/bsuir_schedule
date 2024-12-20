@@ -13,6 +13,7 @@ EmployeeModel _$EmployeeModelFromJson(Map<String, dynamic> json) =>
       imageUrl: json['photoLink'] as String,
       urlId: json['urlId'] as String,
       id: (json['id'] as num).toInt(),
+      fio: json['fio'] as String?,
       email: json['email'] as String?,
       middleName: json['middleName'] as String?,
       calendarId: json['calendarId'] as String?,

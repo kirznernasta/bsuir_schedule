@@ -8,10 +8,15 @@ class _ExamsSchedule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final exams = schedule.exams;
+    final exams = (schedule.exams)
+      ?..sort(
+        (a, b) => DateFormat('dd.MM.yyyy').parse(a.lessonDate ?? '').compareTo(
+              DateFormat('dd.MM.yyyy').parse(b.lessonDate ?? ''),
+            ),
+      );
 
     if (exams == null) {
-      return Column(
+      return const Column(
         children: [
           Text('No exams!'),
         ],
@@ -22,8 +27,11 @@ class _ExamsSchedule extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 16.h),
-        Text('Exams: ${schedule.startExamsDate}-${schedule.endExamsDate}'),
-        SizedBox(height: 16.h),
+        if (schedule.startExamsDate != null &&
+            schedule.endExamsDate != null) ...[
+          Text('Exams: ${schedule.startExamsDate}-${schedule.endExamsDate}'),
+          SizedBox(height: 16.h),
+        ],
         Expanded(
           child: ListView(
             children: [

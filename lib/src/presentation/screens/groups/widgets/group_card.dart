@@ -1,14 +1,18 @@
 part of './../groups_screen.dart';
 
 class _GroupCard extends StatelessWidget {
+  final bool isFavourite;
+  final bool hasCodeText;
   final bool hasTopRounded;
   final bool hasBottomRounded;
   final StudentGroupEntity group;
 
   const _GroupCard({
     required this.group,
+    required this.isFavourite,
     required this.hasTopRounded,
     required this.hasBottomRounded,
+    this.hasCodeText = true,
   });
 
   @override
@@ -23,7 +27,7 @@ class _GroupCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (hasTopRounded)
+        if (hasTopRounded && hasCodeText)
           Padding(
             padding: EdgeInsets.only(left: 8.w, bottom: 4.h),
             child: Text(
@@ -40,7 +44,9 @@ class _GroupCard extends StatelessWidget {
           hasBottomRounded: hasBottomRounded,
           onTap: () => context.pushRoute(
             ScheduleRoute(
+              id: group.id ?? 0,
               isGroupSchedule: true,
+              isFavourite: isFavourite,
               searchingInput: group.name,
             ),
           ),

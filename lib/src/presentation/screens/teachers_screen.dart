@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../router/router.dart';
 import '../../config/config.dart';
+import '../../domain/domain.dart';
 import '../presentation.dart';
 
 @RoutePage()
@@ -19,9 +20,12 @@ class TeachersScreen extends StatefulWidget {
 
 class _TeachersScreenState extends State<TeachersScreen> {
   final employeesCubit = getIt<EmployeesCubit>();
+  final favouriteEmployeesCubit = getIt<FavouriteEmployeesCubit>();
 
   late final FocusNode focusNode;
   late final TextEditingController searchController;
+
+  List<int> favouriteIds = [];
 
   @override
   void initState() {
@@ -31,6 +35,7 @@ class _TeachersScreenState extends State<TeachersScreen> {
     searchController = TextEditingController();
 
     employeesCubit.fetchAllEmployees();
+    favouriteEmployeesCubit.fetchFavouriteEmployees();
   }
 
   @override
@@ -51,7 +56,8 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   return const AppLoader();
                 }
 
-                final employees = state.employees;
+                final allEmployees = state.allEmployees;
+                final filteredEmployees = state.filteredEmployees;
 
                 return Column(
                   children: [
@@ -72,52 +78,68 @@ class _TeachersScreenState extends State<TeachersScreen> {
                       textEditingController: searchController,
                     ),
                     SizedBox(height: 16.h),
-                    if (employees.isNotEmpty)
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: employees.length,
-                          separatorBuilder: (_, i) => separator,
-                          itemBuilder: (_, i) {
-                            final employee = employees[i];
-                            final titleTexts = [
-                              employee.lastName,
-                              employee.firstName,
-                              if (employee.middleName != null)
-                                employee.middleName,
-                            ];
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          BlocBuilder(
+                            bloc: favouriteEmployeesCubit,
+                            builder: (_, state) {
+                              if (state is! FavouriteEmployeesUpdate) {
+                                return const SizedBox();
+                              }
+                              favouriteIds = state.employeesIds;
 
-                            return AppCard(
-                              hasTopRounded: i == 0,
-                              title: titleTexts.join(' '),
-                              hasBottomRounded: i == employees.length - 1,
-                              suffix: ClipRRect(
-                                borderRadius: BorderRadius.circular(24.r),
-                                child: Image.network(
-                                  width: 48.w,
-                                  height: 48.w,
-                                  employee.imageUrl,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) =>
-                                      Assets.icons.placeholder.image(
-                                    width: 48.w,
-                                    fit: BoxFit.cover,
-                                  ),
+                              if (favouriteIds.isEmpty) return const SizedBox();
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('Favourites ⭐️'),
+                                  SizedBox(height: 16.h),
+                                  for (var i = 0;
+                                      i < favouriteIds.length;
+                                      i++) ...[
+                                    _EmployeeCard(
+                                      employee: allEmployees.firstWhere(
+                                        (employee) =>
+                                            employee.id == favouriteIds[i],
+                                      ),
+                                      isFavourite: true,
+                                      hasTopRounded: i == 0,
+                                      hasBottomRounded:
+                                          i == favouriteIds.length - 1,
+                                    ),
+                                    if (i < favouriteIds.length - 1)
+                                      SizedBox(height: 2.h),
+                                  ],
+                                  SizedBox(height: 16.h),
+                                ],
+                              );
+                            },
+                          ),
+                          if (filteredEmployees.isNotEmpty)
+                            for (var i = 0; i < filteredEmployees.length; i++)
+                              Builder(
+                                builder: (_) => Column(
+                                  children: [
+                                    _EmployeeCard(
+                                      employee: filteredEmployees[i],
+                                      hasTopRounded: i == 0,
+                                      hasBottomRounded:
+                                          i == filteredEmployees.length - 1,
+                                      isFavourite: favouriteIds
+                                          .contains(filteredEmployees[i].id),
+                                    ),
+                                    if (i < filteredEmployees.length - 1)
+                                      separator,
+                                  ],
                                 ),
-                              ),
-                              onTap: () => context.pushRoute(
-                                ScheduleRoute(
-                                  isGroupSchedule: false,
-                                  searchingInput: employee.urlId,
-                                  title:
-                                      '${employee.lastName} ${employee.firstName[0]} ${employee.middleName?[0] ?? ''}',
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    else
-                      NoSearchResult(searchInput: searchController.text),
+                              )
+                          else
+                            NoSearchResult(searchInput: searchController.text),
+                        ],
+                      ),
+                    ),
                   ],
                 );
               },
@@ -133,5 +155,56 @@ class _TeachersScreenState extends State<TeachersScreen> {
     employeesCubit.close();
 
     super.dispose();
+  }
+}
+
+class _EmployeeCard extends StatelessWidget {
+  final bool isFavourite;
+  final bool hasTopRounded;
+  final bool hasBottomRounded;
+  final EmployeeEntity employee;
+
+  const _EmployeeCard({
+    required this.employee,
+    required this.isFavourite,
+    required this.hasTopRounded,
+    required this.hasBottomRounded,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final titleTexts = [
+      employee.lastName,
+      employee.firstName,
+      if (employee.middleName != null) employee.middleName,
+    ];
+
+    return AppCard(
+      title: titleTexts.join(' '),
+      hasTopRounded: hasTopRounded,
+      hasBottomRounded: hasBottomRounded,
+      suffix: ClipRRect(
+        borderRadius: BorderRadius.circular(24.r),
+        child: Image.network(
+          employee.imageUrl,
+          width: 48.w,
+          height: 48.w,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Assets.icons.placeholder.image(
+            width: 48.w,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      onTap: () => context.pushRoute(
+        ScheduleRoute(
+          id: employee.id,
+          title: employee.fio,
+          isGroupSchedule: false,
+          isFavourite: isFavourite,
+          searchingInput: employee.urlId,
+        ),
+      ),
+    );
   }
 }

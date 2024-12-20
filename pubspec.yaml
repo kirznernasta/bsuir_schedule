@@ -12,9 +12,11 @@ dependencies:
   bloc: ^8.1.4
   collection: ^1.18.0
   connectivity_plus: ^5.0.2
+  crypto: ^3.0.3
   cupertino_icons: ^1.0.6
   dio: ^5.7.0
   dotted_border: ^2.1.0
+  email_validator: ^3.0.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -23,6 +25,7 @@ dependencies:
   flutter_native_splash: ^2.4.0
   flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.10+1
+  fluttertoast: ^8.2.8
   get_it: ^7.6.7
   infinite_scroll_pagination: ^4.0.0
   injectable: 2.3.2
@@ -31,7 +34,9 @@ dependencies:
   openapi_generator_annotations: ^5.0.2
   path_provider: ^2.1.2
   permission_handler: ^11.3.0
+  postgres: ^3.4.4
   salomon_bottom_bar: ^3.3.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   analyzer: ^5.13.0 # https://github.com/petercinibulk/envied/issues/89

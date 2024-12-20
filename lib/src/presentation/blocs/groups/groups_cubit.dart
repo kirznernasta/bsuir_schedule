@@ -23,12 +23,12 @@ class GroupsCubit extends Cubit<GroupsState> {
 
     if (isClosed) return;
 
-    emit(GroupsUpdate(groups: groups));
+    emit(GroupsUpdate(allGroups: groups, filteredGroups: groups));
   }
 
   void filterByGroupNumber(String searchInput) {
     final groups = _groups.where((group) => group.name.startsWith(searchInput));
 
-    emit(GroupsUpdate(groups: groups.toList()));
+    emit(GroupsUpdate(allGroups: _groups, filteredGroups: groups.toList()));
   }
 }

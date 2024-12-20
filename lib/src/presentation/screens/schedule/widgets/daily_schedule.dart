@@ -13,8 +13,16 @@ class _DailySchedule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (schedule.endDate == null) {
+      return const Center(child: Text('No schedule!'));
+    }
+
     final currentDate = DateTime.now().toLocal();
-    const currentWeek = 2;
+    final currentWeek = calculateWeekNumber(
+      DateTime(2024, 9).difference(currentDate).inDays,
+      1,
+      DateTime(2024, 9).weekday,
+    );
     final weekSchedule = schedule.schedules;
     final daysLeft =
         DateTime.parse(schedule.endDate?.split('.').reversed.join('-') ?? '')
@@ -22,7 +30,6 @@ class _DailySchedule extends StatelessWidget {
                 .inDays +
             2;
     final currentWeekDay = currentDate.weekday;
-    final daysLeftToWeekEnd = 7 - currentWeekDay;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

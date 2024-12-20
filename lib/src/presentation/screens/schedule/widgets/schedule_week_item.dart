@@ -24,33 +24,78 @@ class _ScheduleWeekItem extends StatelessWidget {
           useSafeArea: true,
           showDragHandle: true,
           context: context,
+          backgroundColor: const Color(0xFFEDEDED),
           builder: (context) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 16.h),
                   Text(
                     item.subjectAbbreviationName,
+                    style: textTheme.labelLarge,
                   ),
                   SizedBox(height: 16.h),
-                  Text(
-                    'Groups',
-                  ),
-                  SizedBox(height: 16.h),
-                  for (var i = 0; i < item.studentGroups.length; i++) ...[
-                    AppCard(
-                      hasTopRounded: i == 0,
-                      title: item.studentGroups[i].name,
-                      hasBottomRounded: i == item.studentGroups.length - 1,
+                  if (isGroupSchedule) ...[
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Employees',
+                      ),
                     ),
-                    if (i < item.studentGroups.length - 1)
-                      Divider(height: 1.h, thickness: 1.h),
+                    SizedBox(height: 16.h),
+                    for (var i = 0; i < (item.employees?.length ?? 0); i++) ...[
+                      AppCard(
+                        hasTopRounded: i == 0,
+                        suffix: ClipRRect(
+                          borderRadius: BorderRadius.circular(24.r),
+                          child: Image.network(
+                            item.employees?[i].imageUrl ?? '',
+                            width: 48.w,
+                            height: 48.w,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                Assets.icons.placeholder.image(
+                              width: 48.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        title: [
+                          item.employees?[i].lastName,
+                          item.employees?[i].firstName,
+                          if (item.employees?[i].middleName != null)
+                            item.employees?[i].middleName,
+                        ].join(' '),
+                        hasBottomRounded: i == item.studentGroups.length - 1,
+                      ),
+                      if (i < item.studentGroups.length - 1)
+                        Divider(height: 1.h, thickness: 1.h),
+                    ],
+                  ] else ...[
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Groups',
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    for (var i = 0; i < item.studentGroups.length; i++) ...[
+                      AppCard(
+                        hasTopRounded: i == 0,
+                        title: item.studentGroups[i].name,
+                        hasBottomRounded: i == item.studentGroups.length - 1,
+                      ),
+                      if (i < item.studentGroups.length - 1)
+                        Divider(height: 1.h, thickness: 1.h),
+                    ],
                   ],
                   SizedBox(height: 16.h),
-                  Text(
-                    'Details',
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Details',
+                    ),
                   ),
                   SizedBox(height: 16.h),
                   Container(
@@ -78,6 +123,7 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 2.h),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -109,6 +155,7 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 2.h),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -140,6 +187,7 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 2.h),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -171,6 +219,7 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 2.h),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -202,10 +251,11 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 2.h),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: 8.r.toBorderRadius(),
+                      borderRadius: 8.r.toBorderRadius(isBottomRounded: true),
                     ),
                     padding:
                         EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
@@ -287,7 +337,7 @@ class _ScheduleWeekItem extends StatelessWidget {
                         SizedBox(width: 4.w),
                         Assets.icons.calendar.svg(
                           width: 16.w,
-                          colorFilter: Color(0xff3333333).colorFilter,
+                          colorFilter: const Color(0xff3333333).colorFilter,
                         ),
                         SizedBox(width: 4.w),
                         Text(item.weekNumbers.join(',')),
@@ -333,7 +383,7 @@ class _ScheduleWeekItem extends StatelessWidget {
                         width: 48.w,
                         height: 48.w,
                         decoration: BoxDecoration(
-                          color: Color(0xFFEDEDED),
+                          color: const Color(0xFFEDEDED),
                           borderRadius: BorderRadius.circular(24.r),
                         ),
                         padding: EdgeInsets.all(8.r),
@@ -352,10 +402,11 @@ class _ScheduleWeekItem extends StatelessWidget {
                           width: 18.w,
                           height: 18.w,
                           decoration: BoxDecoration(
-                              color: Color(0xFFEDEDED),
-                              borderRadius: BorderRadius.circular(24.r),
-                              border: Border.all(color: Color(0xff646464))),
-                          child: Center(
+                            color: const Color(0xFFEDEDED),
+                            borderRadius: BorderRadius.circular(24.r),
+                            border: Border.all(color: const Color(0xff646464)),
+                          ),
+                          child: const Center(
                             child: Icon(
                               Icons.add,
                               size: 9,

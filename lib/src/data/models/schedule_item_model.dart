@@ -28,18 +28,18 @@ class ScheduleItemModel {
   final String? startLessonDate;
   final List<EmployeeModel>? employees;
 
-  const ScheduleItemModel({
+  ScheduleItemModel({
     required this.isSplit,
     required this.auditories,
-    required this.weekNumbers,
     required this.endLessonTime,
     required this.studentGroups,
     required this.subgroupNumber,
     required this.isAnnouncement,
     required this.startLessonTime,
-    required this.subjectFullName,
-    required this.lessonTypeAbbrev,
-    required this.subjectAbbreviationName,
+    this.subjectFullName = '',
+    this.lessonTypeAbbrev = '',
+    this.subjectAbbreviationName = '',
+    this.weekNumbers = const [],
     this.note,
     this.dateLesson,
     this.employees,
@@ -49,4 +49,9 @@ class ScheduleItemModel {
 
   factory ScheduleItemModel.fromJson(Map<String, dynamic> json) =>
       _$ScheduleItemModelFromJson(json);
+
+  @override
+  String toString() {
+    return 'subgroupNumber: $subgroupNumber, auditories: $auditories, weekNumbers: $weekNumbers, $startLessonTime-$endLessonTime, $startLessonDate-$endLessonDate, $subjectFullName, ${employees?.map((e) => e.fio)} ';
+  }
 }

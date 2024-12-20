@@ -7,6 +7,7 @@ class EmployeeMapper {
   static EmployeeEntity fromModel(EmployeeModel model) {
     return EmployeeEntity(
       id: model.id,
+      fio: model.fio,
       urlId: model.urlId,
       email: model.email,
       lastName: model.lastName,

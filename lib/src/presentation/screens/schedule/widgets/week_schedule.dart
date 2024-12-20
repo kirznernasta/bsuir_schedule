@@ -15,6 +15,11 @@ class _WeekSchedule extends StatelessWidget {
   Widget build(BuildContext context) {
     final weekSchedule = schedule.schedules;
 
+    if (schedule.endDate == null) {
+      return const Center(child: Text('No schedule!'));
+    }
+
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -25,7 +30,7 @@ class _WeekSchedule extends StatelessWidget {
           child: ListView(
             children: [
               if (weekSchedule!.monday != null) ...[
-                Text('Monday'),
+                const Text('Monday'),
                 for (final item in weekSchedule.monday!
                     .where((e) => e.lessonType.isRegularType)) ...[
                   _ScheduleWeekItem(
@@ -41,7 +46,7 @@ class _WeekSchedule extends StatelessWidget {
                 SizedBox(height: 24.h),
               ],
               if (weekSchedule.tuesday != null) ...[
-                Text('Tuesday'),
+                const Text('Tuesday'),
                 for (final item in weekSchedule.tuesday!
                     .where((e) => e.lessonType.isRegularType)) ...[
                   _ScheduleWeekItem(
@@ -57,7 +62,7 @@ class _WeekSchedule extends StatelessWidget {
                 SizedBox(height: 24.h),
               ],
               if (weekSchedule.wednesday != null) ...[
-                Text('Wednesday'),
+                const Text('Wednesday'),
                 for (final item in weekSchedule.wednesday!
                     .where((e) => e.lessonType.isRegularType)) ...[
                   _ScheduleWeekItem(
@@ -73,7 +78,7 @@ class _WeekSchedule extends StatelessWidget {
                 SizedBox(height: 24.h),
               ],
               if (weekSchedule.thursday != null) ...[
-                Text('Thursday'),
+                const Text('Thursday'),
                 for (final item in weekSchedule.thursday!
                     .where((e) => e.lessonType.isRegularType)) ...[
                   _ScheduleWeekItem(
@@ -89,7 +94,7 @@ class _WeekSchedule extends StatelessWidget {
                 SizedBox(height: 24.h),
               ],
               if (weekSchedule.friday != null) ...[
-                Text('Friday'),
+                const Text('Friday'),
                 for (final item in weekSchedule.friday!
                     .where((e) => e.lessonType.isRegularType)) ...[
                   _ScheduleWeekItem(
@@ -105,7 +110,7 @@ class _WeekSchedule extends StatelessWidget {
                 SizedBox(height: 24.h),
               ],
               if (weekSchedule.saturday != null) ...[
-                Text('Saturday'),
+                const Text('Saturday'),
                 for (final item in weekSchedule.saturday!
                     .where((e) => e.lessonType.isRegularType)) ...[
                   _ScheduleWeekItem(

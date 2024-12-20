@@ -10,6 +10,7 @@ class EmployeeModel {
   final String imageUrl;
   final String lastName;
   final String firstName;
+  final String? fio;
   final String? email;
   final String? middleName;
   final String? calendarId;
@@ -20,6 +21,7 @@ class EmployeeModel {
     required this.imageUrl,
     required this.urlId,
     required this.id,
+    this.fio,
     this.email,
     this.middleName,
     this.calendarId,

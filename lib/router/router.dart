@@ -26,5 +26,8 @@ class AppRouter extends _$AppRouter {
       ],
     ),
     AutoRoute(page: ScheduleRoute.page),
+    AutoRoute(page: SignUpRoute.page),
+    AutoRoute(page: SignInRoute.page),
+    AutoRoute(page: ExitConfirmationRoute.page),
   ];
 }

@@ -29,6 +29,13 @@ class $AssetsIconsGen {
   SvgGenImage get closeInCircle =>
       const SvgGenImage('assets/icons/close_in_circle.svg');
 
+  /// File path: assets/icons/eye.svg
+  SvgGenImage get eye => const SvgGenImage('assets/icons/eye.svg');
+
+  /// File path: assets/icons/eye_crossed.svg
+  SvgGenImage get eyeCrossed =>
+      const SvgGenImage('assets/icons/eye_crossed.svg');
+
   /// File path: assets/icons/group.svg
   SvgGenImage get group => const SvgGenImage('assets/icons/group.svg');
 
@@ -63,6 +70,8 @@ class $AssetsIconsGen {
         arrowRight,
         calendar,
         closeInCircle,
+        eye,
+        eyeCrossed,
         group,
         groups,
         idCard,
