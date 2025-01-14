@@ -59,71 +59,71 @@ ORDER BY
     return groups;
   }
 
-  // Future<void> _insertItem(
-  //   Connection conn,
-  //   StudentGroupModel group,
-  //   ScheduleItemModel item,
-  //   int weekday,
-  // ) async {
-  //   final lessonTypeId = switch (item.lessonTypeAbbrev) {
-  //     'ЛК' => 1,
-  //     'ЛР' => 2,
-  //     'ПЗ' => 3,
-  //     'Экзамен' => 4,
-  //     'Консультация' => 5,
-  //     _ => 6,
-  //   };
-  //
-  //   final values =
-  //       "(ARRAY[${item.auditories.map((e) => "'$e'").join(',')}], '${item.startLessonTime}', '${item.endLessonTime}', ${item.subgroupNumber}, $lessonTypeId, ARRAY[${item.weekNumbers.map((e) => e).join(',')}], ${item.dateLesson == null ? 'NULL' : "'${item.dateLesson}'"}, ${item.startLessonDate == null ? 'NULL' : "'${item.startLessonDate}'"}, ${item.endLessonDate == null ? 'NULL' : "'${item.endLessonDate}'"}, $weekday, '${item.subjectAbbreviationName}', '${item.subjectFullName}')";
-  //
-  //   final employees = item.employees;
-  //   var employeesSql = '';
-  //
-  //   if (employees != null) {
-  //     final employeeValues = employees.map((e) => '(s_id, ${e.id})').join(',');
-  //
-  //     employeesSql = '''
-  //                     INSERT INTO schedule_employees (schedule_id, employee_id)
-  //                         VALUES
-  //                         $employeeValues
-  //                         ON CONFLICT (schedule_id, employee_id)
-  //                         DO NOTHING;
-  //                     ''';
-  //   }
-  //
-  //   await conn.execute('''
-  //                     DO \$\$
-  //                     DECLARE
-  //                         s_id INT;
-  //                     BEGIN
-  //                         INSERT INTO schedule (
-  //                             auditories,
-  //                             start_lesson_time,
-  //                             end_lesson_time,
-  //                             subgroup_number,
-  //                             lesson_type_id,
-  //                             week_number,
-  //                             date_lesson,
-  //                             start_lesson_date,
-  //                             end_lesson_date,
-  //                             weekday,
-  //                             subject_name,
-  //                             subject_full_name
-  //                         ) VALUES $values
-  //                         ON CONFLICT (auditories, start_lesson_time, end_lesson_time, subgroup_number, lesson_type_id, week_number, date_lesson, start_lesson_date, end_lesson_date, weekday, subject_id, subject_name, subject_full_name)
-  //                         DO NOTHING
-  //                         RETURNING id INTO s_id;
-  //
-  //                         INSERT INTO schedule_student_groups (schedule_id, group_id)
-  //                         VALUES (s_id, ${group.id})
-  //                         ON CONFLICT (schedule_id, group_id)
-  //                         DO NOTHING;
-  //
-  //                         $employeesSql
-  //                     END \$\$;
-  //                     ''');
-  // }
+  Future<void> _insertItem(
+    Connection conn,
+    StudentGroupModel group,
+    ScheduleItemModel item,
+    int weekday,
+  ) async {
+    final lessonTypeId = switch (item.lessonTypeAbbrev) {
+      'ЛК' => 1,
+      'ЛР' => 2,
+      'ПЗ' => 3,
+      'Экзамен' => 4,
+      'Консультация' => 5,
+      _ => 6,
+    };
+
+    final values =
+        "(ARRAY[${item.auditories.map((e) => "'$e'").join(',')}], '${item.startLessonTime}', '${item.endLessonTime}', ${item.subgroupNumber}, $lessonTypeId, ARRAY[${item.weekNumbers.map((e) => e).join(',')}], ${item.dateLesson == null ? 'NULL' : "'${item.dateLesson}'"}, ${item.startLessonDate == null ? 'NULL' : "'${item.startLessonDate}'"}, ${item.endLessonDate == null ? 'NULL' : "'${item.endLessonDate}'"}, $weekday, '${item.subjectAbbreviationName}', '${item.subjectFullName}')";
+
+    final employees = item.employees;
+    var employeesSql = '';
+
+    if (employees != null) {
+      final employeeValues = employees.map((e) => '(s_id, ${e.id})').join(',');
+
+      employeesSql = '''
+                      INSERT INTO schedule_employees (schedule_id, employee_id)
+                          VALUES
+                          $employeeValues
+                          ON CONFLICT (schedule_id, employee_id)
+                          DO NOTHING;
+                      ''';
+    }
+
+    await conn.execute('''
+                      DO \$\$
+                      DECLARE
+                          s_id INT;
+                      BEGIN
+                          INSERT INTO schedule (
+                              auditories,
+                              start_lesson_time,
+                              end_lesson_time,
+                              subgroup_number,
+                              lesson_type_id,
+                              week_number,
+                              date_lesson,
+                              start_lesson_date,
+                              end_lesson_date,
+                              weekday,
+                              subject_name,
+                              subject_full_name
+                          ) VALUES $values
+                          ON CONFLICT (auditories, start_lesson_time, end_lesson_time, subgroup_number, lesson_type_id, week_number, date_lesson, start_lesson_date, end_lesson_date, weekday, subject_id, subject_name, subject_full_name)
+                          DO NOTHING
+                          RETURNING id INTO s_id;
+
+                          INSERT INTO schedule_student_groups (schedule_id, group_id)
+                          VALUES (s_id, ${group.id})
+                          ON CONFLICT (schedule_id, group_id)
+                          DO NOTHING;
+
+                          $employeesSql
+                      END \$\$;
+                      ''');
+  }
 
   Future<List<EmployeeModel>> fetchAllEmployees() async {
     final List<EmployeeModel> employees = [];

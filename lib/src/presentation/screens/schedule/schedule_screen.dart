@@ -42,6 +42,7 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
+  final userCubit = getIt<UserCubit>();
   final scheduleCubit = getIt<ScheduleCubit>();
   final favouriteGroupsCubit = getIt<FavouriteGroupsCubit>();
   final favouriteEmployeesCubit = getIt<FavouriteEmployeesCubit>();
@@ -65,6 +66,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.theme.textTheme;
+    final userState = userCubit.state;
 
     return ScreenTemplate(
       body: DefaultTabController(
@@ -101,39 +103,41 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     ],
                   ),
                 ),
-                ValueListenableBuilder(
-                  valueListenable: favouriteValueNotifier,
-                  builder: (_, isFavourite, __) => IconButton(
-                    onPressed: () async {
-                      final previous = favouriteValueNotifier.value;
+                if (userState is UserUpdate && userState.hasAccount)
+                  ValueListenableBuilder(
+                    valueListenable: favouriteValueNotifier,
+                    builder: (_, isFavourite, __) => IconButton(
+                      onPressed: () async {
+                        final previous = favouriteValueNotifier.value;
 
-                      if (previous) {
-                        if (widget.isGroupSchedule) {
-                          await favouriteGroupsCubit
-                              .deleteFavouriteGroup(widget.id);
+                        if (previous) {
+                          if (widget.isGroupSchedule) {
+                            await favouriteGroupsCubit
+                                .deleteFavouriteGroup(widget.id);
+                          } else {
+                            await favouriteEmployeesCubit
+                                .deleteFavouriteEmployee(widget.id);
+                          }
                         } else {
-                          await favouriteEmployeesCubit
-                              .deleteFavouriteEmployee(widget.id);
+                          if (widget.isGroupSchedule) {
+                            await favouriteGroupsCubit
+                                .addFavouriteGroup(widget.id);
+                          } else {
+                            await favouriteEmployeesCubit
+                                .addFavouriteEmployee(widget.id);
+                          }
                         }
-                      } else {
-                        if (widget.isGroupSchedule) {
-                          await favouriteGroupsCubit
-                              .addFavouriteGroup(widget.id);
-                        } else {
-                          await favouriteEmployeesCubit
-                              .addFavouriteEmployee(widget.id);
-                        }
-                      }
 
-                      favouriteValueNotifier.value = !previous;
-                    },
-                    icon: Icon(
-                      isFavourite ? Icons.star : Icons.star_border_outlined,
-                      color: isFavourite ? const Color(0xFFF1CB06) : Colors.grey,
-                      size: 24.w,
+                        favouriteValueNotifier.value = !previous;
+                      },
+                      icon: Icon(
+                        isFavourite ? Icons.star : Icons.star_border_outlined,
+                        color:
+                            isFavourite ? const Color(0xFFF1CB06) : Colors.grey,
+                        size: 24.w,
+                      ),
                     ),
                   ),
-                ),
                 if (widget.isGroupSchedule)
                   Padding(
                     padding: EdgeInsets.only(left: 8.w),

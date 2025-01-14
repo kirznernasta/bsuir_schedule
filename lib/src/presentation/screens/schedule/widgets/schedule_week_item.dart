@@ -123,6 +123,40 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (item.lessonDate != null) ...[
+                    SizedBox(height: 2.h),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: 8.r.toBorderRadius(),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Date',
+                                  maxLines: 1,
+                                  style: context.theme.textTheme.labelLarge,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            item.lessonDate!,
+                            maxLines: 1,
+                            style: context.theme.textTheme.labelLarge,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   SizedBox(height: 2.h),
                   Container(
                     decoration: BoxDecoration(
@@ -223,7 +257,9 @@ class _ScheduleWeekItem extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: 8.r.toBorderRadius(),
+                      borderRadius: 8.r.toBorderRadius(
+                            isBottomRounded: item.lessonDate != null,
+                          ),
                     ),
                     padding:
                         EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
@@ -251,38 +287,40 @@ class _ScheduleWeekItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 2.h),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: 8.r.toBorderRadius(isBottomRounded: true),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Weeks',
-                                maxLines: 1,
-                                style: context.theme.textTheme.labelLarge,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                  if (item.lessonDate == null) ...[
+                    SizedBox(height: 2.h),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: 8.r.toBorderRadius(isBottomRounded: true),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Weeks',
+                                  maxLines: 1,
+                                  style: context.theme.textTheme.labelLarge,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Text(
-                          item.weekNumbers.join(','),
-                          maxLines: 1,
-                          style: context.theme.textTheme.labelLarge,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                          Text(
+                            item.weekNumbers.join(','),
+                            maxLines: 1,
+                            style: context.theme.textTheme.labelLarge,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                   SizedBox(height: 48.h),
                 ],
               ),
